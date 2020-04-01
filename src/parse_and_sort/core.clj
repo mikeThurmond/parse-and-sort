@@ -2,7 +2,7 @@
   (:require
 
     [clojure.string :as s]
-    []
+    [clj-time.format :as f]
 
             [ring.adapter.jetty :refer [run-jetty]])
   (:gen-class))
@@ -34,8 +34,12 @@
 ;;add sort fn to services
 
 
+(def custom-formatter (f/formatter "MM/DD/YYY"))
 
-
+(defn date-compare [one two]
+  (compare
+    (f/parse custom-formatter one)
+    (f/parse custom-formatter two)))
 
 
 (defn output-set [data]
@@ -48,6 +52,7 @@
   ;;Output 2 – sorted by birth date, ascending.
   ;; oldest -> most recent
   ;;oldest first
+  (sort-by :DateOfBirth #(date-compare %1 %2) data)
 
   ;Output 3 – sorted by last name, descending. Z -> A
   (sort-by :LastName #(compare %2 %1) data)
