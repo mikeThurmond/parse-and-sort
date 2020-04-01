@@ -1,27 +1,17 @@
 (ns parse-and-sort.core
   (:require
-
-    [clojure.string :as s]
-    [clj-time.format :as f]
-
-            [ring.adapter.jetty :refer [run-jetty]])
+    [parse-and-sort.server :refer [app]]
+    [ring.adapter.jetty :refer [run-jetty]]
+    [parse-and-sort.services.core :as s])
   (:gen-class))
 
 
 ;;todo
-;;add to gitignore
 ;;add test cases for routes and logic
 ;;test cases
 ;;add api
 ;;add api test cases
 
-
-;;normalize str
-;;restructure str
-(defn handle-str [file]
-  (as-> file f
-    (s/split f #"\n")
-    (map #(s/split % #" ") f)))
 
 ;;todo
 ;;try/catch? for repeat data
@@ -33,65 +23,17 @@
 ;;add service folder
 ;;add sort fn to services
 
-
-(def custom-formatter (f/formatter "MM/DD/YYY"))
-
-(defn date-compare [one two]
-  (compare
-    (f/parse custom-formatter one)
-    (f/parse custom-formatter two)))
-
-
-(defn output-set [data]
-
-  ;Output 1 – sorted by gender (females before males) then by last name ascending. A -> Z
-  (sort-by (juxt :Gender :LastName) data)
-
-
-  ;;bring in clj time
-  ;;Output 2 – sorted by birth date, ascending.
-  ;; oldest -> most recent
-  ;;oldest first
-  (sort-by :DateOfBirth #(date-compare %1 %2) data)
-
-  ;Output 3 – sorted by last name, descending. Z -> A
-  (sort-by :LastName #(compare %2 %1) data)
-  )
-
-
-(defn create-set [keys data]
-  (into #{}
-    (map #(zipmap keys %) data)))
-
-
-(defn tfn [text]
-  (let [[header & data] (handle-str text)
-         keys (map #(keyword %) header)
-        result (create-set keys data)]
-    result
-
-    ))
-
+;;;;args logic for input
 (defn -main
   "add here"
   [& args]
-  (let [text (slurp "test.txt")
-        ;[header & remaining] (handle-str file)
-        ; keys (map #(keyword %) header)
-        ]
+  (let [text (slurp "test.txt")] ;;change this to args
+    (s/create-and-output text))
 
-      (tfn text)
-
-    ;;todo
-    ;;commit to repo
-    ;;save off as atom as dataset
-
-
-
-    )
-
-  ;(run-jetty #'app {:port 3000, :join? false})
-  ;(println "server running in port 3000")
+  ;;todo
+  ;;test this
+  (run-jetty #'app {:port 3000, :join? false})
+  (println "server running in port 3000")
 
 
   )
