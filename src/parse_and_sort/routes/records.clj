@@ -12,18 +12,14 @@
   ["/records"
    ["/gender" {:get (fn [_]
                       {:status 200
-                       :body   (s/sort-gender->last-asc @s/state)})}]
+                       :body   (s/sort-gender->lastname-asc @s/global-state)})}]
    ["/birthdate" {:get (fn [_]
                          {:status 200
-                          :body   (s/sort-dob-asc @s/state)})}]
+                          :body   (s/sort-dob-asc @s/global-state)})}]
    ["/name" {:get (fn [_]
                     {:status 200
-                     :body   (s/sort-lastname-desc @s/state)})}]
+                     :body   (s/sort-lastname-desc @s/global-state)})}]
    ["" {:post (fn [{params :body-params}]
-
-                (println :body-params "one")
-                (println params)
-                (println)
-
+                (swap! s/global-state conj params)
                 {:status 200
-                 :body   {:yes "success!"}})}]])
+                 :body   params})}]])

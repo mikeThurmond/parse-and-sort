@@ -7,9 +7,6 @@
     [reitit.ring.coercion :as coercion]
     [reitit.ring :as ring]))
 
-;;todo
-;;test route with postman
-
 (def app
   (ring/ring-handler
     (ring/router
