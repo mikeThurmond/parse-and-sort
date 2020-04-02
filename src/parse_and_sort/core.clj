@@ -11,7 +11,7 @@
 ;;test cases
 ;;add api
 ;;add api test cases
-;;document assumptions
+;;document assumptions - formatting of docs, output to console
 
 ;;todo
 ;;try/catch? for repeat data
@@ -20,8 +20,8 @@
 ;;handle other formats
 ;;remove | or ,
 
-;;add service folder
-;;add sort fn to services
+
+;;test parsing the date and then returning via gets
 
 ;;;;args logic for input
 (defn -main
@@ -30,14 +30,8 @@
 
   (run-jetty #'app {:port 3000, :join? false})
   (println "server running in port 3000")
+  (println)
 
   (let [text (slurp "test.txt")] ;;change this to args
-    (s/create-and-output text))
-
-  ;;todo
-  ;;test this
-  ;;(run-jetty #'app {:port 3000, :join? false})
-  ;;(println "server running in port 3000")
-
-
+    (s/parse-and-sort text))
   )

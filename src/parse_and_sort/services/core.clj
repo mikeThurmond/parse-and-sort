@@ -35,19 +35,18 @@
 ;;try into #{}
 (defn output-set [data]
 
-
   ;;new fn??
   (println "Output 1 – sorted by gender (females before males) then by last name ascending.")
-  (println)
   (println (sort-gender->last-asc data))
+  (println)
 
   (println "Output 2 – sorted by birth date, ascending.")
-  (println)
   (println (sort-dob-asc data))
+  (println)
 
   (println "Output 3 – sorted by last name, descending.")
-  (println)
   (println (sort-lastname-desc data))
+  (println)
 
   )
 
@@ -62,19 +61,14 @@
 
   (->> data
     (map #(zipmap keys %))
-    (into #{})
+    ;;(into #{})
     (reset! state))
 
   )
 
 
-;;parse and sort
-(defn create-and-output [text]
+(defn parse-and-sort [text]
   (let [[header & data] (handle-str text)
         keys (map #(keyword %) header)
         result (create-set keys data)]
-    ;;(reset! state result)
-
-    (output-set result)
-
-    ))
+    (output-set result)))

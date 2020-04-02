@@ -10,23 +10,20 @@
 
 (def routes
   ["/records"
+   ["/gender" {:get (fn [_]
+                      {:status 200
+                       :body   (s/sort-gender->last-asc @s/state)})}]
+   ["/birthdate" {:get (fn [_]
+                         {:status 200
+                          :body   (s/sort-dob-asc @s/state)})}]
+   ["/name" {:get (fn [_]
+                    {:status 200
+                     :body   (s/sort-lastname-desc @s/state)})}]
+   ["" {:post (fn [{params :body-params}]
 
-   ;;rm
-   ["/plus" {:get  (fn [{{:strs [x y]} :query-params :as req}]
-                     {:status 200
-                      :body   {:total (+ (Long/parseLong x) (Long/parseLong y))}})
-             :post (fn [{{:keys [x y]} :body-params}]
-                     {:status 200
-                      :body   {:total (+ x y)}})}]
+                (println :body-params "one")
+                (println params)
+                (println)
 
-   ["/gender" {:get  (fn [_]
-                     {:status 200
-                      :body   @s/state})}]
-
-   ["/birthdate" {:get  (fn [{{:strs [x y]} :query-params :as req}]
-                       {:status 200
-                        :body   {:total (+ (Long/parseLong x) (Long/parseLong y))}})}]
-   ["/name" {:get  (fn [{{:strs [x y]} :query-params :as req}]
-                       {:status 200
-                        :body   {:total (+ (Long/parseLong x) (Long/parseLong y))}})}]
-   ])
+                {:status 200
+                 :body   {:yes "success!"}})}]])
