@@ -11,7 +11,7 @@
 ;;test cases
 ;;add api
 ;;add api test cases
-
+;;document assumptions
 
 ;;todo
 ;;try/catch? for repeat data
@@ -27,13 +27,17 @@
 (defn -main
   "add here"
   [& args]
+
+  (run-jetty #'app {:port 3000, :join? false})
+  (println "server running in port 3000")
+
   (let [text (slurp "test.txt")] ;;change this to args
     (s/create-and-output text))
 
   ;;todo
   ;;test this
-  (run-jetty #'app {:port 3000, :join? false})
-  (println "server running in port 3000")
+  ;;(run-jetty #'app {:port 3000, :join? false})
+  ;;(println "server running in port 3000")
 
 
   )

@@ -13,38 +13,68 @@
     (s/split f #"\n")
     (map #(s/split % #" ") f)))
 
-
 (defn compare-dates [one two]
   (compare
     (f/parse custom-formatter one)
     (f/parse custom-formatter two)))
 
+(defn sort-gender->last-asc [data]
+  (sort-by (juxt :Gender :LastName) data))
 
+(defn sort-dob-asc [data]
+  (sort-by :DateOfBirth #(compare-dates %1 %2) data))
+
+(defn sort-lastname-desc [data]
+  (sort-by :LastName #(compare %2 %1) data))
+
+
+;;A -> Z
+;;oldest -> most recent
+;;Z -> A
+
+;;try into #{}
 (defn output-set [data]
 
-  ;Output 1 – sorted by gender (females before males) then by last name ascending. A -> Z
-  (sort-by (juxt :Gender :LastName) data)
 
+  ;;new fn??
+  (println "Output 1 – sorted by gender (females before males) then by last name ascending.")
+  (println)
+  (println (sort-gender->last-asc data))
 
-  ;;bring in clj time
-  ;;Output 2 – sorted by birth date, ascending.
-  ;; oldest -> most recent
-  ;;oldest first
-  (sort-by :DateOfBirth #(compare-dates %1 %2) data)
+  (println "Output 2 – sorted by birth date, ascending.")
+  (println)
+  (println (sort-dob-asc data))
 
-  ;Output 3 – sorted by last name, descending. Z -> A
-  (sort-by :LastName #(compare %2 %1) data)
+  (println "Output 3 – sorted by last name, descending.")
+  (println)
+  (println (sort-lastname-desc data))
+
   )
 
 
 (defn create-set [keys data]
-  (into #{}
-    (map #(zipmap keys %) data)))
 
+  #_(into #{}
+    (map #(zipmap keys %) data))
+
+ #_(reset! state (into #{}
+                  (map #(zipmap keys %) data)))
+
+  (->> data
+    (map #(zipmap keys %))
+    (into #{})
+    (reset! state))
+
+  )
+
+
+;;parse and sort
 (defn create-and-output [text]
   (let [[header & data] (handle-str text)
         keys (map #(keyword %) header)
         result (create-set keys data)]
-    (reset! state result)
+    ;;(reset! state result)
+
+    (output-set result)
 
     ))
