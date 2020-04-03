@@ -10,11 +10,12 @@
 
 (def custom-formatter (f/formatter "MM/DD/YYY"))
 
-;;normalize str
-(defn restructure-str [file]
-  (as-> file f
-    (s/split f #"\n")
-    (map #(s/split % #" ") f)))
+(defn str->rows-and-cols [string]
+  (as-> string s
+    (s/split s #"\n")
+    (map #(s/replace % #"," "") s)
+    (map #(s/replace % #"\| " "") s)
+    (map #(s/split % #" ") s)))
 
 (defn compare-dates [one two]
   (compare
@@ -30,18 +31,15 @@
 (defn sort-lastname-desc [data]
   (sort-by :LastName #(compare %2 %1) data))
 
-(def output [{:text output1
-              :sort-fn   sort-gender->lastname-asc}
-             {:text output2
-              :sort-fn   sort-dob-asc}
-             {:text output3
-              :sort-fn   sort-lastname-desc}])
+(def output [{:text output1 :sort-fn sort-gender->lastname-asc}
+             {:text output2 :sort-fn sort-dob-asc}
+             {:text output3 :sort-fn sort-lastname-desc}])
 
 ;;A -> Z
 ;;oldest -> most recent
 ;;Z -> A
-
 ;;try into #{}
+
 (defn output-set [data]
   (doseq [{:keys [text sort-fn]}
           output]
@@ -65,6 +63,6 @@
     (reset! state)))
 
 (defn parse-and-sort [text]
-  (let [[header & data] (restructure-str text)
+  (let [[header & data] (str->rows-and-cols text)
         keys (map #(keyword %) header)]
     (create-set keys data global-state)))

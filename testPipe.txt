@@ -1,3 +1,5 @@
 LastName | FirstName | Gender | FavoriteColor | DateOfBirth
-Thurmond | Michael | Male | Green | 10/08/1987
+Zell | Zana | Female | Orange | 08/01/1979
+Thurmond | Michael | Male | Green | 09/12/1986
 Smith | Jane | Female | Red | 11/25/1991
+Allen | Will | Male | Pink | 01/01/2016
