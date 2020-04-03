@@ -11,11 +11,11 @@
 (def custom-formatter (f/formatter "MM/DD/YYY"))
 
 (defn str->rows-and-cols [string]
-  (as-> string s
-    (s/split s #"\n")
-    (map #(s/replace % #"," "") s)
-    (map #(s/replace % #"\| " "") s)
-    (map #(s/split % #" ") s)))
+  (let [string (s/split string #"\n")]
+    (->> string
+      (map #(s/replace % #"," ""))
+      (map #(s/replace % #"\| " ""))
+      (map #(s/split % #" ")))))
 
 (defn compare-dates [one two]
   (compare
@@ -35,27 +35,25 @@
              {:text output2 :sort-fn sort-dob-asc}
              {:text output3 :sort-fn sort-lastname-desc}])
 
+(defn output-set [data]
+  (doseq [{:keys [text sort-fn]} output]
+    (println text)
+    (println (into #{} (sort-fn data)))
+    (println)))
+
+
 ;;A -> Z
 ;;oldest -> most recent
 ;;Z -> A
 ;;try into #{}
-
-(defn output-set [data]
-  (doseq [{:keys [text sort-fn]}
-          output]
-    (println text)
-    (println (sort-fn data))
-    (println)))
-
-
 #_(into #{}
     (map #(zipmap keys %) data))
 
 #_(reset! global-state (into #{}
                   (map #(zipmap keys %) data)))
 
-
 ;;test repeats on input to make sure duplicates are dropped
+;;test condition where I post a duplicate, should not insert
 (defn create-set [keys data state]
   (->> data
     (map #(zipmap keys %))

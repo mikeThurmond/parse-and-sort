@@ -1,5 +1,6 @@
 (ns parse-and-sort.routes.records
-  (:require [parse-and-sort.services.core :as s]))
+  (:require [parse-and-sort.services.core :as s]
+            [clojure.spec.alpha :as spec]))
 
 
 ;POST /records - Post a single data line
@@ -7,6 +8,12 @@
 ;GET /records/gender - returns records sorted by gender
 ;GET /records/birthdate - returns records sorted by birthdate
 ;GET /records/name
+
+(def records-spec {:LastName      string?
+                   :FirstName     string?
+                   :Gender        string?
+                   :FavoriteColor string?
+                   :DateOfBirth   string?})
 
 (def routes
   ["/records"
@@ -19,7 +26,11 @@
    ["/name" {:get (fn [_]
                     {:status 200
                      :body   (s/sort-lastname-desc @s/global-state)})}]
-   ["" {:post (fn [{params :body-params}]
-                (swap! s/global-state conj params)
-                {:status 200
-                 :body   params})}]])
+   ;;do not allow duplicates
+   ["" {:post
+        {:parameters {:body records-spec}
+         :responses {200 {:body records-spec}}
+         :handler    (fn [{params :body-params}]
+                       (swap! s/global-state conj params)
+                       {:status 200
+                        :body   params})}}]])

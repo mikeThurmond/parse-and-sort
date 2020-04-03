@@ -7,26 +7,36 @@
 
 
 ;;todo
-;;add test cases for routes and logic
-;;test cases
-;;add api
-;;add api test cases
 ;;document assumptions
 ;; - formatting of docs (\n at end of line, properely formatted input),
 ;; output to console,
 ;;post input as json
 
+;;issues
+;; figuring out how to restructure the string to something I could work with
+;; pipe symbol in the regex took me by surprise cause I finsihed the comma ...
+
+
 ;;todo
-;;try/catch? for repeat data
-;;with-open for slurp
+;;coercion
+;;add test cases for routes and service logic
+;;test cases
+;;add api test cases
+
 
 ;;test parsing fomratting date to state on input and then returning via gets
+;;add spec for date
 
-;;test args input
+;;try/catch for slurp?
+;;test args input multiple or no val
+;;(.exists (clojure.java.io/file "Example.txt"))
 (defn -main [& args]
   (if (= (count args) 1)
     (let [_ (run-jetty #'app {:port 3000, :join? false})
           text (slurp (first args))
           result (s/parse-and-sort text)]
       (s/output-set result))
-    (System/exit 0)))
+    (do
+      (println "Error: Please check your command line args and try again")
+      (println "lein run your-file.txt")
+      (System/exit 0))))
