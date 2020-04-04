@@ -2,31 +2,31 @@
   (:require [parse-and-sort.services.core :as s]
             [clojure.spec.alpha :as spec]))
 
-
-;POST /records - Post a single data line
-; in any of the 3 formats supported by your existing code
-;GET /records/gender - returns records sorted by gender
-;GET /records/birthdate - returns records sorted by birthdate
-;GET /records/name
-
 (def records-spec {:LastName      string?
                    :FirstName     string?
                    :Gender        string?
                    :FavoriteColor string?
                    :DateOfBirth   string?})
 
+(defn get-gender [_]
+  {:status 200
+   :body   (s/sort-gender-lastname-asc @s/global-state)})
+
+#_(fn [_]
+    {:status 200
+     :body   (s/sort-gender-lastname-asc @s/global-state)})
+
 (def routes
   ["/records"
    ["/gender" {:get (fn [_]
-                      {:status 200
-                       :body   (s/sort-gender-lastname-asc @s/global-state)})}]
+                      (get-gender _))}]
    ["/birthdate" {:get (fn [_]
                          {:status 200
                           :body   (s/sort-dob-asc @s/global-state)})}]
    ["/name" {:get (fn [_]
                     {:status 200
                      :body   (s/sort-lastname-desc @s/global-state)})}]
-
+   ;;start program and add same post data twice
    ;;do not allow duplicates
    ["" {:post
         {:parameters {:body records-spec}

@@ -8,17 +8,17 @@
                   {:LastName "Allen" :FirstName "Will" :Gender "Male" :DateOfBirth "01/01/2016"}
                   {:LastName "Zell" :FirstName "Zana" :Gender "Female" :DateOfBirth "08/01/2020"}})
 
-;;todo
-;;parse and sort with delemiters
-;;look int juxt function for reversal of sort
 
 (deftest create-set-test
   (testing "create set with keys and values")
   (let [keys [:FirstName :LastName]
         vals [["Jim" "Smith"]]
+        dup-vals [["Jim" "Smith"]
+                  ["Jim" "Smith"]]
         result #{{:FirstName "Jim"
                   :LastName "Smith"}}]
-    (is (= result (create-set keys vals)))))
+    (is (= result (create-set keys vals)))
+    (is (= result (create-set keys dup-vals)))))
 
 (deftest compare-dates-test
   (testing "date comparison")

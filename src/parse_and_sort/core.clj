@@ -2,7 +2,12 @@
   (:require
     [parse-and-sort.server :refer [app]]
     [ring.adapter.jetty :refer [run-jetty]]
-    [parse-and-sort.services.core :as s])
+    [parse-and-sort.services.core :as s]
+
+    [parse-and-sort.routes.records :as r]
+    [cheshire.core :as c]
+    [ring.mock.request :refer [request json-body]]
+    )
   (:gen-class))
 
 
@@ -25,9 +30,10 @@
 ;;todo
 ;;add test cases for routes and service logic
 ;;add api test cases
+;;add cloverage
 
+;;add test case for conj function
 
-;;test repeats on input to make sure duplicates are dropped
 ;;test condition where I post a duplicate, should not insert
 
 ;;test parsing formatting date to state on input and then returning via gets
@@ -36,6 +42,7 @@
 ;;try/catch for slurp?
 ;;test args input multiple or no val
 ;;(.exists (clojure.java.io/file "Example.txt"))
+;;run server last??
 (defn -main [& args]
   (if (= (count args) 1)
     (let [_ (run-jetty #'app {:port 3000, :join? false})
