@@ -13,7 +13,7 @@
 ;;look int juxt function for reversal of sort
 
 (deftest create-set-test
-  (testing "create set")
+  (testing "create set with keys and values")
   (let [keys [:FirstName :LastName]
         vals [["Jim" "Smith"]]
         result #{{:FirstName "Jim"
@@ -51,4 +51,29 @@
     (is (= (and (= (:Gender r4) "Male") (= (:LastName r1) "Thurmond"))))))
 
 
+(def base "LastName FirstName Gender FavoriteColor DateOfBirth\nZell Zana Female Orange 08/01/1979")
+
+(deftest str->rows-and-cols-base-test
+  (testing "parse base input string into rows and columns"
+    (let [[header & data] (str->rows-and-cols base)]
+      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
+      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
+
+
+(def comma "LastName, FirstName, Gender, FavoriteColor, DateOfBirth\nZell, Zana, Female, Orange, 08/01/1979")
+
+(deftest str->rows-and-cols-comma-test
+  (testing "parse comma input string into rows and columns"
+    (let [[header & data] (str->rows-and-cols comma)]
+      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
+      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
+
+
+(def pipe "LastName | FirstName | Gender | FavoriteColor | DateOfBirth\nZell | Zana | Female | Orange | 08/01/1979")
+
+(deftest str->rows-and-cols-pipe-test
+  (testing "parse pipe input string into rows and columns"
+    (let [[header & data] (str->rows-and-cols pipe)]
+      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
+      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
 

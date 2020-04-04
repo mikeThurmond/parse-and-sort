@@ -17,21 +17,17 @@
       (map #(s/replace % #"\| " ""))
       (map #(s/split % #" ")))))
 
-;;
 (defn compare-dates [one two]
   (compare
     (f/parse custom-formatter one)
     (f/parse custom-formatter two)))
 
-;;
 (defn sort-gender-lastname-asc [data]
   (sort-by (juxt :Gender :LastName) data))
 
-;;
 (defn sort-dob-asc [data]
   (sort-by :DateOfBirth #(compare-dates %1 %2) data))
 
-;;
 (defn sort-lastname-desc [data]
   (sort-by :LastName #(compare %2 %1) data))
 
@@ -45,7 +41,6 @@
     (println (into #{} (sort-fn data)))
     (println)))
 
-;;
 (defn create-set [keys data]
   (into #{}
       (map #(zipmap keys %) data)))
