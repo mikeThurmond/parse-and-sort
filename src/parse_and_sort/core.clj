@@ -12,19 +12,25 @@
 ;; output to console,
 ;;post input as json
 
+
+;;lein run file.txt
+;;lein test
+
 ;;issues
 ;; figuring out how to restructure the string to something I could work with
 ;; pipe symbol in the regex took me by surprise cause I finsihed the comma ...
+;; read docs for spec and reitit
 
 
 ;;todo
-;;coercion
 ;;add test cases for routes and service logic
-;;test cases
 ;;add api test cases
 
 
-;;test parsing fomratting date to state on input and then returning via gets
+;;test repeats on input to make sure duplicates are dropped
+;;test condition where I post a duplicate, should not insert
+
+;;test parsing formatting date to state on input and then returning via gets
 ;;add spec for date
 
 ;;try/catch for slurp?
@@ -33,10 +39,14 @@
 (defn -main [& args]
   (if (= (count args) 1)
     (let [_ (run-jetty #'app {:port 3000, :join? false})
-          text (slurp (first args))
-          result (s/parse-and-sort text)]
-      (s/output-set result))
+          text (slurp (first args))]
+      (->> text
+        (s/parse-and-sort)
+        (s/output-set)
+        (reset! s/global-state)))
     (do
       (println "Error: Please check your command line args and try again")
       (println "lein run your-file.txt")
-      (System/exit 0))))
+      ;(System/exit 0)
+      )))
+

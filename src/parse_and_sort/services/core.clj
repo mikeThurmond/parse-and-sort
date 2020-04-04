@@ -17,21 +17,25 @@
       (map #(s/replace % #"\| " ""))
       (map #(s/split % #" ")))))
 
+;;
 (defn compare-dates [one two]
   (compare
     (f/parse custom-formatter one)
     (f/parse custom-formatter two)))
 
-(defn sort-gender->lastname-asc [data]
+;;
+(defn sort-gender-lastname-asc [data]
   (sort-by (juxt :Gender :LastName) data))
 
+;;
 (defn sort-dob-asc [data]
   (sort-by :DateOfBirth #(compare-dates %1 %2) data))
 
+;;
 (defn sort-lastname-desc [data]
   (sort-by :LastName #(compare %2 %1) data))
 
-(def output [{:text output1 :sort-fn sort-gender->lastname-asc}
+(def output [{:text output1 :sort-fn sort-gender-lastname-asc}
              {:text output2 :sort-fn sort-dob-asc}
              {:text output3 :sort-fn sort-lastname-desc}])
 
@@ -41,26 +45,12 @@
     (println (into #{} (sort-fn data)))
     (println)))
 
-
-;;A -> Z
-;;oldest -> most recent
-;;Z -> A
-;;try into #{}
-#_(into #{}
-    (map #(zipmap keys %) data))
-
-#_(reset! global-state (into #{}
-                  (map #(zipmap keys %) data)))
-
-;;test repeats on input to make sure duplicates are dropped
-;;test condition where I post a duplicate, should not insert
-(defn create-set [keys data state]
-  (->> data
-    (map #(zipmap keys %))
-    (into #{})
-    (reset! state)))
+;;
+(defn create-set [keys data]
+  (into #{}
+      (map #(zipmap keys %) data)))
 
 (defn parse-and-sort [text]
   (let [[header & data] (str->rows-and-cols text)
         keys (map #(keyword %) header)]
-    (create-set keys data global-state)))
+    (create-set keys data)))

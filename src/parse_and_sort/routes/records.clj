@@ -19,13 +19,14 @@
   ["/records"
    ["/gender" {:get (fn [_]
                       {:status 200
-                       :body   (s/sort-gender->lastname-asc @s/global-state)})}]
+                       :body   (s/sort-gender-lastname-asc @s/global-state)})}]
    ["/birthdate" {:get (fn [_]
                          {:status 200
                           :body   (s/sort-dob-asc @s/global-state)})}]
    ["/name" {:get (fn [_]
                     {:status 200
                      :body   (s/sort-lastname-desc @s/global-state)})}]
+
    ;;do not allow duplicates
    ["" {:post
         {:parameters {:body records-spec}
