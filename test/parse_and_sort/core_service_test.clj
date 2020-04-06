@@ -8,17 +8,30 @@
                   {:LastName "Allen" :FirstName "Will" :Gender "Male" :DateOfBirth "01/01/2016"}
                   {:LastName "Zell" :FirstName "Zana" :Gender "Female" :DateOfBirth "08/01/2020"}})
 
-
 (deftest create-set-test
-  (testing "create set with keys and values")
-  (let [keys [:FirstName :LastName]
-        vals [["Jim" "Smith"]]
-        dup-vals [["Jim" "Smith"]
-                  ["Jim" "Smith"]]
-        result #{{:FirstName "Jim"
-                  :LastName "Smith"}}]
-    (is (= result (create-set keys vals)))
-    (is (= result (create-set keys dup-vals)))))
+  (testing "create set with keys and values"
+    (let [keys [:FirstName :LastName]
+          vals [["Jim" "Smith"]]
+          result #{{:FirstName "Jim"
+                    :LastName  "Smith"}}]
+      (is (= result (create-set keys vals)))))
+  (testing "create set with keys and values does not insert duplicates"
+    (let [keys [:FirstName :LastName]
+          dup-vals [["Jim" "Smith"]
+                    ["Jim" "Smith"]]
+          result #{{:FirstName "Jim"
+                    :LastName  "Smith"}}]
+      (is (= result (create-set keys dup-vals))))))
+
+(deftest add-to-set-test
+  (testing "fn used in swap! to add new items to set")
+  (let [curr #{{:FirstName "Jim"
+                  :LastName "Smith"}}
+        new {:FirstName "New"
+             :LastName "Person"}
+        result #{{:FirstName "Jim" :LastName "Smith"}
+                 {:FirstName "New" :LastName "Person"}}]
+    (is (= result (add-to-set curr new)))))
 
 (deftest compare-dates-test
   (testing "date comparison")
@@ -52,28 +65,22 @@
 
 
 (def base "LastName FirstName Gender FavoriteColor DateOfBirth\nZell Zana Female Orange 08/01/1979")
+(def comma "LastName, FirstName, Gender, FavoriteColor, DateOfBirth\nZell, Zana, Female, Orange, 08/01/1979")
+(def pipe "LastName | FirstName | Gender | FavoriteColor | DateOfBirth\nZell | Zana | Female | Orange | 08/01/1979")
+(def expected-header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"])
+(def expected-data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])
 
-(deftest str->rows-and-cols-base-test
+(deftest str->rows-and-cols-test
   (testing "parse base input string into rows and columns"
     (let [[header & data] (str->rows-and-cols base)]
-      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
-      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
-
-
-(def comma "LastName, FirstName, Gender, FavoriteColor, DateOfBirth\nZell, Zana, Female, Orange, 08/01/1979")
-
-(deftest str->rows-and-cols-comma-test
+      (is (= header expected-header))
+      (is (= data expected-data))))
   (testing "parse comma input string into rows and columns"
     (let [[header & data] (str->rows-and-cols comma)]
-      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
-      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
-
-
-(def pipe "LastName | FirstName | Gender | FavoriteColor | DateOfBirth\nZell | Zana | Female | Orange | 08/01/1979")
-
-(deftest str->rows-and-cols-pipe-test
+      (is (= header expected-header))
+      (is (= data expected-data))))
   (testing "parse pipe input string into rows and columns"
     (let [[header & data] (str->rows-and-cols pipe)]
-      (is (= header ["LastName" "FirstName" "Gender" "FavoriteColor" "DateOfBirth"]))
-      (is (= data [["Zell" "Zana" "Female" "Orange" "08/01/1979"]])))))
+      (is (= header expected-header))
+      (is (= data expected-data)))))
 

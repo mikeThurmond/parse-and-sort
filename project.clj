@@ -7,8 +7,7 @@
                  [metosin/reitit "0.4.2"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [clj-time "0.15.2"]
-                 [ring/ring-mock "0.3.2"]
-                 [cheshire "5.10.0"]]
+                 [ring/ring-mock "0.3.2"]]
   :main ^:skip-aot parse-and-sort.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

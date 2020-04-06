@@ -8,6 +8,7 @@
                    :FavoriteColor string?
                    :DateOfBirth   string?})
 
+;;with-redefs on this fn?
 (defn get-gender [_]
   {:status 200
    :body   (s/sort-gender-lastname-asc @s/global-state)})
@@ -25,13 +26,19 @@
                           :body   (s/sort-dob-asc @s/global-state)})}]
    ["/name" {:get (fn [_]
                     {:status 200
+
                      :body   (s/sort-lastname-desc @s/global-state)})}]
    ;;start program and add same post data twice
    ;;do not allow duplicates
+
+   ;;todo
+   ;;test what happens if i have to parse a string on post
+   ;;validate with spec
    ["" {:post
         {:parameters {:body records-spec}
-         :responses {200 {:body records-spec}}
+         ;;:responses {200 {:body records-spec}}
          :handler    (fn [{params :body-params}]
-                       (swap! s/global-state conj params)
-                       {:status 200
-                        :body   params})}}]])
+                       (swap! s/global-state s/add-to-set params)
+                       {:status 201
+                        :body  params})}}]])
+

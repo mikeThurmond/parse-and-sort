@@ -14,6 +14,7 @@
 (def gender-json "[{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"},{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"}]")
 (def dob-json "[{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"},{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"},{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"}]")
 (def name-json "[{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"},{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"},{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"}]")
+(def post-json "{\"DateOfBirth\":\"10/31/2001\",\"FirstName\":\"FN\",\"FavoriteColor\":\"Green\",\"LastName\":\"LN\",\"Gender\":\"Male\"}")
 
 ;;try on create with reset! on create and tear down
 ;;mock out sort fns
@@ -36,12 +37,13 @@
     (is (= (-> (request :get "/records/name")
              app :body slurp)
           name-json)))
-
-  #_(deftest your-handler-test
-    (is (= (r/get-gender (request :get "/records/gender"))
-          {:status  200
-           :headers {"content-type" "text/plain"}
-           :body    "Your expected result"})))
-
-
-  )
+  (testing "POST /records"
+    (reset! s/global-state #{})
+    (is (= (-> (request :post "/records")
+             (json-body {:LastName      "LN"
+                         :FirstName     "FN"
+                         :Gender        "Male"
+                         :FavoriteColor "Green"
+                         :DateOfBirth   "10/31/2001"})
+             app :body slurp)
+          post-json))))

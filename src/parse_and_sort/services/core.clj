@@ -1,6 +1,7 @@
 (ns parse-and-sort.services.core
   (:require [clojure.string :as s]
-            [clj-time.format :as f]))
+            [clj-time.format :as f]
+            [clojure.pprint :as p]))
 
 (defonce global-state (atom #{}))
 
@@ -17,10 +18,13 @@
       (map #(s/replace % #"\| " ""))
       (map #(s/split % #" ")))))
 
+(defn parse-date [date]
+  (f/parse custom-formatter date))
+
 (defn compare-dates [one two]
   (compare
-    (f/parse custom-formatter one)
-    (f/parse custom-formatter two)))
+    (parse-date one)
+    (parse-date two)))
 
 (defn sort-gender-lastname-asc [data]
   (sort-by (juxt :Gender :LastName) data))
@@ -38,14 +42,17 @@
 (defn output-set [data]
   (doseq [{:keys [text sort-fn]} output]
     (println text)
-    (println (into #{} (sort-fn data)))
+    (p/pprint (sort-fn data))
     (println)))
+
+(defn add-to-set [current new]
+  (into #{} (conj current new)))
 
 (defn create-set [keys data]
   (into #{}
-      (map #(zipmap keys %) data)))
+    (map #(zipmap keys %) data)))
 
-(defn parse-and-sort [text]
+(defn parse->create-set [text]
   (let [[header & data] (str->rows-and-cols text)
         keys (map #(keyword %) header)]
     (create-set keys data)))
