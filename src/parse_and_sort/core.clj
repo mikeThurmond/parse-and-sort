@@ -22,12 +22,9 @@
 ;; read docs for spec and reitit
 
 
-
 ;;todo
-;;test condition where I post a duplicate, should not insert
-
-;;test parsing formatting date to state on input and then returning via gets
 ;;add spec for date
+;;test update set
 
 (defn -main [& args]
   (if (= (count args) 1)

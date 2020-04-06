@@ -3,7 +3,8 @@
             [clj-time.format :as f]
             [clojure.pprint :as p]))
 
-(defonce global-state (atom #{}))
+(defonce global-state (atom nil))
+(defonce global-keys (atom nil))
 
 (def output1 "Output 1 – sorted by gender (females before males) then by last name ascending.")
 (def output2 "Output 2 – sorted by birth date, ascending.")
@@ -48,6 +49,12 @@
 (defn add-to-set [current new]
   (into #{} (conj current new)))
 
+(defn update-set [text]
+  (let [vals (first (str->rows-and-cols text))
+        item (zipmap @global-keys vals)]
+    (swap! global-state add-to-set item)
+    item))
+
 (defn create-set [keys data]
   (into #{}
     (map #(zipmap keys %) data)))
@@ -55,4 +62,5 @@
 (defn parse->create-set [text]
   (let [[header & data] (str->rows-and-cols text)
         keys (map #(keyword %) header)]
+    (reset! global-keys keys)
     (create-set keys data)))
