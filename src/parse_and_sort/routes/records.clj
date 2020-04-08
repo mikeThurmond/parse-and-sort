@@ -20,11 +20,10 @@
                     {:status 200
                      :body   (s/sort-lastname-desc @s/global-state)})}]
    ["" {:post
-        {
-         :parameters {:body string?}
+        {:parameters {:body string?}
          :responses {201 {:body records-spec}}
-         :handler    (fn [{single-line :body-params}]
-                       (let [result (s/update-set single-line)]
+         :handler    (fn [{text :body-params}]
+                       (let [result (s/update-set text)]
                          {:status 201
                           :body   result}))}}]])
 

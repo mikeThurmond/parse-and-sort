@@ -25,6 +25,8 @@
 ;;todo
 ;;add spec for date
 ;;test update set
+;;run tests again
+;;re-read instructions
 
 (defn -main [& args]
   (if (= (count args) 1)

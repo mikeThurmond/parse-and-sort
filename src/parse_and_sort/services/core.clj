@@ -19,13 +19,10 @@
       (map #(s/replace % #"\| " ""))
       (map #(s/split % #" ")))))
 
-(defn parse-date [date]
-  (f/parse custom-formatter date))
-
 (defn compare-dates [one two]
   (compare
-    (parse-date one)
-    (parse-date two)))
+    (f/parse custom-formatter one)
+    (f/parse custom-formatter two)))
 
 (defn sort-gender-lastname-asc [data]
   (sort-by (juxt :Gender :LastName) data))
