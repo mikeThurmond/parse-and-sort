@@ -5,9 +5,10 @@
 
 
 ## Usage
-
-lein run file.txt
-lein test
+Run via command line with:
+     lein run file.txt
+Run test cases with:
+     lein test
 
     $ java -jar parse-and-sort-0.1.0-standalone.jar [args]
 
