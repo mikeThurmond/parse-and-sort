@@ -17,10 +17,10 @@ From jar file:
 
 
 ## Assumptions
-The formatting of the input text includes the following:
-headers included (like a csv file)
- properly formatted input in this order (LastName FirstName Gender FavoriteColor DateOfBirth)
-\n at end of line
+The formatting of the input text includes the following:  
+      * headers included (like a csv file). 
+      * properly formatted input in this order (LastName FirstName Gender FavoriteColor DateOfBirth). 
+      * \n at end of line. 
 
 I am outputting all three outputs to the command line
 
