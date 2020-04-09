@@ -1,14 +1,17 @@
 # parse-and-sort
 
 
-## Installation
-
 
 ## Usage
 Run via command line with:
-     lein run file.txt
+      
+      $ lein run file.txt
+
 Run test cases with:
-     lein test
+
+    $ lein test
+
+From jar file:
 
     $ java -jar parse-and-sort-0.1.0-standalone.jar [args]
 
