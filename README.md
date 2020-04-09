@@ -1,6 +1,7 @@
 # parse-and-sort
 
-
+## Test input
+There are 3 test files in the project. test.txt, testComma.txt, and testPipe.txt
 
 ## Usage
 Run via command line with:
@@ -30,17 +31,8 @@ Post input is a single line formatted like this: “LastName FirstName Gender Fa
 GET routes return same data as each respective console output
 
 
-## Options
 
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+### TODO:
 
 ## License
 
