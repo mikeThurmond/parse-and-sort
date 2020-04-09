@@ -1,8 +1,6 @@
 (ns parse-and-sort.routes-records-test
   (:require [parse-and-sort.server :refer [app]]
             [clojure.test :refer :all]
-            [cheshire.core :as c] ;;rm
-            [parse-and-sort.routes.records :as r]
             [parse-and-sort.services.core :as s]
             [ring.mock.request :refer [request json-body]]))
 
@@ -14,12 +12,7 @@
 (def gender-json "[{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"},{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"}]")
 (def dob-json "[{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"},{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"},{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"}]")
 (def name-json "[{\"LastName\":\"Zell\",\"FirstName\":\"Zana\",\"Gender\":\"Female\",\"DateOfBirth\":\"08/01/2020\"},{\"LastName\":\"Thurmond\",\"FirstName\":\"Michael\",\"Gender\":\"Male\",\"DateOfBirth\":\"09/12/1986\"},{\"LastName\":\"Smith\",\"FirstName\":\"Jane\",\"Gender\":\"Female\",\"DateOfBirth\":\"11/25/1991\"},{\"LastName\":\"Allen\",\"FirstName\":\"Will\",\"Gender\":\"Male\",\"DateOfBirth\":\"01/01/2016\"}]")
-(def post-json "{\"DateOfBirth\":\"10/31/2001\",\"FirstName\":\"FN\",\"FavoriteColor\":\"Green\",\"LastName\":\"LN\",\"Gender\":\"Male\"}")
-
-;;try on create with reset! on create and tear down
-;;mock out sort fns
-;;try bad params on input for post
-
+(def post-json "{\"LastName\":\"Deputy\",\"FirstName\":\"Zach\",\"Gender\":\"Male\",\"FavoriteColor\":\"Red\",\"DateOfBirth\":\"01/01/0011\"}")
 
 (deftest routes
   (testing "GET /records/gender"
@@ -40,10 +33,6 @@
   (testing "POST /records"
     (reset! s/global-state #{})
     (is (= (-> (request :post "/records")
-             (json-body {:LastName      "LN"
-                         :FirstName     "FN"
-                         :Gender        "Male"
-                         :FavoriteColor "Green"
-                         :DateOfBirth   "10/31/2001"})
+             (json-body "Deputy, Zach, Male, Red, 01/01/0011")
              app :body slurp)
           post-json))))

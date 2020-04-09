@@ -1,6 +1,7 @@
 (ns parse-and-sort.core-service-test
   (:require [clojure.test :refer :all]
-            [parse-and-sort.services.core :refer :all]))
+            [parse-and-sort.services.core :refer :all]
+            [parse-and-sort.services.core :as s]))
 
 
 (def test-state #{{:LastName "Smith" :FirstName "Jane" :Gender "Female" :DateOfBirth "11/25/1991"}
@@ -32,6 +33,19 @@
         result #{{:FirstName "Jim" :LastName "Smith"}
                  {:FirstName "New" :LastName "Person"}}]
     (is (= result (add-to-set curr new)))))
+
+(deftest update-set-test
+  (testing "updating set used in POST"
+    (let [_ (reset! s/global-state #{})
+          _ (reset! s/global-keys [:LastName :FirstName :Gender :FavoriteColor :DateOfBirth])
+          text "Deputy, Zach, Male, Red, 01/01/0011"
+          result (s/update-set text)]
+      (is (= (count @s/global-state) 1))
+      (is (= result {:LastName "Deputy"
+                     :FirstName "Zach"
+                     :Gender "Male"
+                     :FavoriteColor "Red"
+                     :DateOfBirth "01/01/0011"})))))
 
 (deftest compare-dates-test
   (testing "date comparison")
