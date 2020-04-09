@@ -1,20 +1,18 @@
 # parse-and-sort
 
-FIXME: description
 
 ## Installation
 
-Download from http://example.com/FIXME.
 
 ## Usage
 
-FIXME: explanation
+lein run file.txt
+lein test
 
     $ java -jar parse-and-sort-0.1.0-standalone.jar [args]
 
 ## Options
 
-FIXME: listing of options this app accepts.
 
 ## Examples
 
