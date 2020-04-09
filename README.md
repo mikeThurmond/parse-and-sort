@@ -18,15 +18,16 @@ From jar file:
 
 ## Assumptions
 The formatting of the input text includes the following:  
-      * headers included (like a csv file). 
-      * properly formatted input in this order (LastName FirstName Gender FavoriteColor DateOfBirth). 
-      * \n at end of line. 
+      
+      *headers included (like a csv file). 
+      *properly formatted input in this order (LastName FirstName Gender FavoriteColor DateOfBirth). 
+      *\n at end of line. 
 
 I am outputting all three outputs to the command line
 
 Post input is a single line formatted like this: “LastName FirstName Gender FavoriteColor DateOfBirth”
 
-GET routes return same logic and assignment console output
+GET routes return same data as each respective console output
 
 
 ## Options
